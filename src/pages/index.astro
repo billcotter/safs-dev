@@ -1,0 +1,54 @@
+// src/pages/index.astro
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const featuredFilms = await getCollection('films', (film) => {
+  return film.data.imdbRating && parseFloat(film.data.imdbRating) >= 8.0;
+});
+---
+
+<BaseLayout>
+  <h1>Welcome to St. Augustine Film Society</h1>
+  <!-- Content will go here -->
+</BaseLayout>
+
+// src/pages/films/[...slug].astro
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const films = await getCollection('films');
+  return films.map(film => ({
+    params: { slug: film.data.imdbID },
+    props: { film }
+  }));
+}
+
+const { film } = Astro.props;
+---
+
+<BaseLayout title={film.data.title}>
+  <!-- Film details will go here -->
+</BaseLayout>
+
+// src/pages/directors/[...slug].astro
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const directors = await getCollection('directors');
+  return directors.map(director => ({
+    params: { slug: director.id },
+    props: { director }
+  }));
+}
+
+const { director } = Astro.props;
+---
+
+<BaseLayout title={director.data.name}>
+  <!-- Director details will go here -->
+</BaseLayout>

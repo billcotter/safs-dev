@@ -1,0 +1,73 @@
+// src/layouts/BaseLayout.astro
+---
+import { SEO } from 'astro-seo';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'St. Augustine Film Society',
+  description = 'Discover and discuss classic and contemporary films with the St. Augustine Film Society.',
+  image = '/images/default-og.jpg'
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <SEO
+      title={title}
+      description={description}
+      openGraph={{
+        basic: {
+          title,
+          type: 'website',
+          image,
+        }
+      }}
+      twitter={{
+        creator: '@staugustinefilm'
+      }}
+      extend={{
+        meta: [
+          {
+            name: 'twitter:image',
+            content: image,
+          },
+          { name: 'twitter:title', content: title },
+          { name: 'twitter:description', content: description },
+        ],
+      }}
+    />
+    <script>
+      // Initialize Alpine.js
+      import Alpine from 'alpinejs';
+      window.Alpine = Alpine;
+      Alpine.start();
+    </script>
+  </head>
+  <body class="h-full bg-gray-50">
+    <header class="bg-white shadow-sm">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" x-data="{ isOpen: false }">
+        <!-- Navigation content will go here -->
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-auto">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Footer content will go here -->
+      </div>
+    </footer>
+  </body>
+</html>
